@@ -6,23 +6,31 @@ import (
 	"io/ioutil"
 	"path/filepath"
 	"runtime"
+	"sync"
 
 	"gopkg.in/yaml.v2"
 )
 
+var (
+	once          sync.Once
+	app_config    AppConfig
+	app_configErr error
+)
+
 type AppConfig struct {
-	Server struct {
-		Port int `yaml:"port"`
+	Web struct {
+		Bind string `yaml:"bind"`
 	}
-	Database struct {
-		Host     string `yaml:"host"`
-		Port     int    `yaml:"port"`
-		Username string `yaml:"username"`
-		Password string `yaml:"password"`
-		Database string `yaml:"database"`
+	DB struct {
+		DbType   string `yaml:"DbType"`
+		Host     string `yaml:"Host"`
+		Database string `yaml:"Database"`
+		Username string `yaml:"Username"`
+		Password string `yaml:"Password"`
 	}
 }
 
+// This function will get current excuable directory of app
 func GetAppDir() (string, error) {
 	_, filename, _, ok := runtime.Caller(1)
 	if !ok {
@@ -36,21 +44,25 @@ func GetAppDir() (string, error) {
 
 	return filepath.Dir(absPath), nil
 }
+
+// Load config only one run even call many time
 func LoadConfig(locate string) (AppConfig, error) {
-	var config AppConfig
+	once.Do(func() {
+		config_file_path := filepath.Join(locate, "config", "app.yml")
+		data, err := ioutil.ReadFile(config_file_path)
+		if err != nil {
+			app_configErr = err
+			return
+		}
+		err = yaml.Unmarshal(data, &app_config)
+		if err != nil {
+			app_configErr = err
+			return
+		}
+	})
 
-	config_file_path := filepath.Join(locate, "config", "app.yml")
-	data, err := ioutil.ReadFile(config_file_path)
-	if err != nil {
-		return config, err
-	}
+	return app_config, app_configErr
 
-	err = yaml.Unmarshal(data, &config)
-	if err != nil {
-		return config, err
-	}
-
-	return config, nil
 }
 func (p *AppConfig) String() string {
 	jsonData, err := json.MarshalIndent(p, "", "  ")

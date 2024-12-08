@@ -4,18 +4,25 @@ import (
 	"fmt"
 
 	app_config "gnol.hrm.core/app_config"
+	app_db "gnol.hrm.core/app_db"
+	"gorm.io/gorm"
 )
 
+type User struct {
+	gorm.Model
+	Name string
+	Age  int
+}
+
 func main() {
-	app_dir, err := app_config.GetAppDir()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println(app_dir)
-	config, err := app_config.LoadConfig(app_dir)
+	appPath, err := app_config.GetAppDir()
+
 	if err != nil {
 		panic(err)
-
 	}
-	fmt.Println(config.String())
+	db, err := app_db.Connect(appPath, "hrm")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(db)
 }

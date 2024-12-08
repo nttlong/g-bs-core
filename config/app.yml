@@ -1,6 +1,8 @@
+web:
+  bind: 0.0.0.0:8011
 db:
   DbType: mysql
-  Host: local
+  Host: 127.0.0.1
   Database: hrm
   Username: root
   Password: 123456
