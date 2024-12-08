@@ -1,0 +1,6 @@
+db:
+  DbType: mysql
+  Host: local
+  Database: hrm
+  Username: root
+  Password: 123456

@@ -1,0 +1,7 @@
+docker run -d --name my-mysql -p 3306:3306 mysql
+
+docker rm -f $(docker ps -q)
+docker image rm -f $(docker images -q)
+
+docker run -d --name my-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql
+docker run -d --name my-mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 -v "C:\code\go\go-bs-core\g-bs-core\my-sql-data:/var/lib/mysql" mysql
