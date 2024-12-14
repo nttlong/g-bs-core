@@ -23,5 +23,16 @@ func main() {
 		return
 	}
 	fmt.Println(app)
+	db := app.GetDB()
+	db.AutoMigrate(&User{})
+	//list all users
+	var users []User
+	db.Find(&users)
+	for _, user := range users {
+		fmt.Println(user)
+	}
+
+	user := User{Name: "John", Age: 25}
+	db.Create(&user)
 	//print
 }

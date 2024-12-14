@@ -21,6 +21,8 @@ type Config struct {
 		Username string `yaml:"Username"`
 		Password string `yaml:"Password"`
 	}
+	ConnectionString       string
+	MasterConnectionString string
 }
 
 func (c *Config) Load(appDir string) error {
@@ -39,6 +41,8 @@ func (c *Config) Load(appDir string) error {
 	if err := yaml.Unmarshal(data, c); err != nil {
 		return fmt.Errorf("error unmarshalling config file: %w", err)
 	}
+	c.ConnectionString = c.getConnectionString()
+	c.MasterConnectionString = c.getConnectionStringNoDatabase()
 	return nil
 }
 
@@ -49,4 +53,11 @@ func (p *Config) String() string {
 	}
 
 	return string(jsonData)
+}
+
+func (p *Config) getConnectionString() string {
+	return fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=utf8mb4&parseTime=True&loc=Local", p.DB.Username, p.DB.Password, p.DB.Host, p.DB.Database)
+}
+func (p *Config) getConnectionStringNoDatabase() string {
+	return fmt.Sprintf("%s:%s@tcp(%s)/?charset=utf8mb4&parseTime=True&loc=Local", p.DB.Username, p.DB.Password, p.DB.Host)
 }

@@ -7,13 +7,15 @@ import (
 	"runtime"
 
 	config "gnol.hrm.core/pkg/structs/config"
+	database "gnol.hrm.core/pkg/structs/database"
+	"gorm.io/gorm"
 )
 
 type App struct {
 	Name    string
 	Version string
 	AppPath string
-	Config  *config.Config
+	Config  config.Config
 }
 
 func (c *App) Start() error {
@@ -28,7 +30,7 @@ func (c *App) Start() error {
 		return fmt.Errorf("Error getting absolute path: %w", err)
 	}
 	c.AppPath = filepath.Dir(absPath)
-	c.Config = &config.Config{}
+	c.Config = config.Config{}
 	err = c.Config.Load(c.AppPath)
 	if err != nil {
 		fmt.Println(err)
@@ -46,4 +48,12 @@ func (p *App) String() string {
 	}
 
 	return string(jsonData)
+}
+func (p *App) GetDB() *gorm.DB {
+	ret, err := database.GetDB(p.Config)
+	if err != nil {
+		panic(err)
+	}
+	return ret
+
 }
