@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 
-	app_config "gnol.hrm.core/app_config"
-	app_db "gnol.hrm.core/app_db"
+	application "gnol.hrm.core/pkg/structs/app"
 	"gorm.io/gorm"
 )
 
@@ -15,14 +14,14 @@ type User struct {
 }
 
 func main() {
-	appPath, err := app_config.GetAppDir()
+	//create new user
 
+	app := application.App{}
+	err := app.Start()
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
+		return
 	}
-	db, err := app_db.Connect(appPath, "hrm")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(db)
+	fmt.Println(app)
+	//print
 }
