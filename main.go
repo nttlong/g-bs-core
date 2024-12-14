@@ -11,6 +11,7 @@ type User struct {
 	gorm.Model
 	Name string
 	Age  int
+	Code string
 }
 
 func main() {
