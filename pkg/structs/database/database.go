@@ -5,6 +5,7 @@ import (
 	"sync"
 
 	db_config "gnol.hrm.core/pkg/structs/config"
+	mysqlutils "gnol.hrm.core/pkg/structs/mysqlutils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -66,7 +67,7 @@ func GetDB(config db_config.Config) (*gorm.DB, error) {
 	var ret_db *gorm.DB
 	var retErr error = nil
 	once.Do(func() {
-		ret_db, retErr = createDatabasefNotExist(config)
+		ret_db, retErr = mysqlutils.CreateDatabasefNotExist(config)
 		if ret_db != nil { // Ensure that the creation was successful
 			dbMap[dbName] = ret_db
 		}

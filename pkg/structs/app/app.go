@@ -18,6 +18,11 @@ type App struct {
 	Config  config.Config
 }
 
+// start app by given appPath
+func (c *App) LoadConfig(appPath string) error {
+	c.AppPath = appPath
+	return c.Config.Load(c.AppPath)
+}
 func (c *App) Start() error {
 	// calculate and set the AppPath
 	_, filename, _, ok := runtime.Caller(1)

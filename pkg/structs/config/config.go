@@ -20,12 +20,20 @@ type Config struct {
 		Database string `yaml:"Database"`
 		Username string `yaml:"Username"`
 		Password string `yaml:"Password"`
+		Port     uint16 `yaml:"Port"`
 	}
 	ConnectionString       string
 	MasterConnectionString string
 }
 
+// Load reads the config file and unmarshals the YAML data into the Config struct.
+// appDir is the directory where the config file is located.
 func (c *Config) Load(appDir string) error {
+	//check appDir exists and is a directory
+	if fileInfo, err := os.Stat(appDir); os.IsNotExist(err) || !fileInfo.IsDir() {
+		return fmt.Errorf("app directory does not exist: %s or not a directory", appDir)
+	}
+
 	configFilePath := filepath.Join(appDir, "config", "app.yml")
 	// Check if the config file exists
 	if _, err := os.Stat(configFilePath); os.IsNotExist(err) {

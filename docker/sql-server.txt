@@ -1,0 +1,10 @@
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=test123" -e "MSSQL_PID=Evaluation" -p 1433:1433  -v "C:\code\go\go-bs-core\g-bs-core\sql-server-data:/var/opt/mssql/data" --name sqlpreview --hostname sqlpreview  mcr.microsoft.com/mssql/server:2022-preview-ubuntu-22.04
+
+docker rm -f $(docker ps -q)
+docker image rm -f $(docker images -q)
+docker run -v "C:\code\go\go-bs-core\g-bs-core\sql-server-data:/var/opt/mssql/data" -d -e SA_PASSWORD=test123 -e SQLSERVER_DATABASE=master -e SQLSERVER_USER=sa -e SQLSERVER_PASSWORD=test123 -p 1433:1433 exoplatform/sqlserver:2017-CU8
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=123456"   -p 1433:1433 --name sql1 --hostname sql1  -d mcr.microsoft.com/mssql/server:2022-latest
+docker run --name mssqltrek-con1 -d -p 1433:1433 -e sa_password=123456 -e ACCEPT_EULA=Y microsoft/mssql-server-windows-developer
+docker run -e "ACCEPT_EULA=YES" -e "SA_PASSWORD=admin123451212" -p 1443:1443 -d mcr.microsoft.com/mssql/server:2017-latest
+docker system prune
+docker run   -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=nttl0ng2024" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2019-CU14-ubuntu-20.04

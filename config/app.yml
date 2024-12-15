@@ -1,8 +1,17 @@
 web:
   bind: 0.0.0.0:8011
-db:
-  DbType: mysql
+db1:
+  DbType: mysql # for mysql
   Host: 127.0.0.1
   Database: hrm
   Username: root
   Password: 123456
+  Port: 3306 # for mysql
+db:
+#Server=your_server_name;Database=your_database_name;User Id=your_username;Password=your_password;
+  DbType: sql-server # for sql server 
+  Host: 127.0.0.1
+  Database: hrm
+  Username: root
+  Password: 123456
+  Port: 1433 # for sql server
